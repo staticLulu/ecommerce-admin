@@ -1286,6 +1286,7 @@ __metadata:
     postcss: "npm:^8"
     react: "npm:^18"
     react-dom: "npm:^18"
+    react-sweetalert2: "npm:^0.6.0"
     tailwindcss: "npm:^3.4.1"
     typescript: "npm:^5"
   languageName: unknown
@@ -3725,6 +3726,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-sweetalert2@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "react-sweetalert2@npm:0.6.0"
+  dependencies:
+    sweetalert2: "npm:^11.7.5"
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+  checksum: 10c0/691df0a6dc4b7afb52f5c561bac723e1dba6daafa8ed58a34afd24acfb72e9e6c5738e1fd0026f3994866bc08534a1d8ac241dc9e007bf51d861ad2c9371ed8d
+  languageName: node
+  linkType: hard
+
 "react@npm:^18":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
@@ -4284,6 +4297,13 @@ __metadata:
   version: 1.0.0
   resolution: "supports-preserve-symlinks-flag@npm:1.0.0"
   checksum: 10c0/6c4032340701a9950865f7ae8ef38578d8d7053f5e10518076e6554a9381fa91bd9c6850193695c141f32b21f979c985db07265a758867bac95de05f7d8aeb39
+  languageName: node
+  linkType: hard
+
+"sweetalert2@npm:^11.7.5":
+  version: 11.14.4
+  resolution: "sweetalert2@npm:11.14.4"
+  checksum: 10c0/995aa03f53a3c8f326419778f561b5caefd2ece9e5c5f9c659c5ef4b1c839a067d3bd0856f7f6239dcaf15c9645f53016a554ea5113a1472b26fca5aae3fad8a
   languageName: node
   linkType: hard
 
