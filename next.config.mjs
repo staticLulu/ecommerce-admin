@@ -5,7 +5,12 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'lh3.googleusercontent.com', // Add the Google image hostname
+        hostname: 'lh3.googleusercontent.com', // Existing Google images configuration
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com', // Firebase Storage configuration
         pathname: '/**', // Allow any path under this hostname
       },
     ],

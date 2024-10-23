@@ -26,7 +26,10 @@ function Categories({swal}: any) {
     const data = { 
       name, 
       parentCategory, 
-      properties    
+      properties: properties.map((p: any) => ({
+        name: p.name,
+        values: p.values.split(','),
+      }))    
     };
     if (editedCategory) {
       await axios.put('/api/categories', {...data,_id:editedCategory._id});
@@ -35,6 +38,8 @@ function Categories({swal}: any) {
       await axios.post('/api/categories', data);
     }
     setName('');
+    setParentCategory('');
+    setProperties([]);
     fetchCategories();
   }
 
@@ -42,6 +47,10 @@ function Categories({swal}: any) {
     setEditedCategory(category);
     setName(category.name);
     setParentCategory(category.parent?._id);
+    setProperties(category.properties.map(({name, values}: any) => ({
+      name,
+      values: values.join(',')
+    })));
   }
 
   function deleteCategory(category: any) {
@@ -91,6 +100,7 @@ function Categories({swal}: any) {
       });
     })
   }
+
   return (
     <Layout>
       <h1>Categories</h1>
@@ -105,16 +115,6 @@ function Categories({swal}: any) {
             onChange={(e) => setName(e.target.value)}
           />
 
-          {/* <select 
-            className="mb-0" 
-            value={parentCategory}
-            onChange={(e) =>setParentCategory(e.target.value)}
-          >
-            <option value="">No parent category</option>
-            {categories.length > 0 && categories.map((category:any, idx: number) => (
-              <option value={category._id} key={idx}>{category.name}</option>
-            ))}
-          </select> */}
           <select 
             value={parentCategory}
             onChange={(e) => setParentCategory(e.target.value)}
@@ -213,12 +213,14 @@ function Categories({swal}: any) {
                   <td>{category?.parent?.name}</td>
                   <td>
                     <button
+                      type="button"
                       className="btn-primary mr-1"
                       onClick={() => editCategory(category)}
                     >
                       Edit
                     </button>
                     <button 
+                      type="button"
                       className="btn-primary"
                       onClick={() => deleteCategory(category)}
                     >Delete</button>

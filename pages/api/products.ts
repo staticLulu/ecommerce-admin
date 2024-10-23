@@ -17,10 +17,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   } 
   else if (method === 'POST') {
     // POST: Create a new product
-    const { title, description, price, category } = req.body;
+    const { title, description, price, category, images, properties } = req.body;
 
     try {
-      const productDoc = await Product.create({ title, description, price, category });
+      const productDoc = await Product.create({ 
+        title, 
+        description, 
+        price, 
+        category,
+        images,
+        properties
+      });
       res.status(201).json(productDoc);
     } catch (error) {
       res.status(500).json({ error: 'Error creating product', details: error });
@@ -28,14 +35,21 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
   }
   else if (method === 'PUT') {
     // PUT: Update a product by id
-    const { title, description, price, category, _id } = req.body;
+    const { title, description, price, category, images, properties, _id } = req.body;
 
     if (!_id) {
       return res.status(400).json({ error: 'Product ID is required for update' });
     }
 
     try {
-      await Product.updateOne({ _id }, { title, description, price, category });
+      await Product.updateOne({ _id }, { 
+        title, 
+        description, 
+        price, 
+        category,
+        images,
+        properties
+      });
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: 'Error updating product', details: error });

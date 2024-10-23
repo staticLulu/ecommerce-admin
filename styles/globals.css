@@ -26,6 +26,10 @@ body {
   }
 }
 
+img {
+  max-height: 100%;
+}
+
 input, textarea, select {
   @apply border border-blue-900 rounded-md px-1 w-full;
   @apply mb-2
