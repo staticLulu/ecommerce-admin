@@ -4,8 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import multiparty from 'multiparty';
 import { storage } from '@/config/firebase';
 import fs from 'fs';
+import { mongooseConnect } from '@/lib/mongoose';
+import { isAdminRequest } from './auth/[...nextauth]';
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
+  await mongooseConnect();
+  await isAdminRequest(req,res);
+  
   const form = new multiparty.Form();
   const { fields, files }: any = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {

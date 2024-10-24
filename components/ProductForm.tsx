@@ -12,6 +12,7 @@ const ProductForm = ({
   price: existingPrice,
   images: existingImages,
   category: assignedCategory,
+  properties: assignedProperties,
 }: {
   _id?: string;
   title?: string; 
@@ -19,6 +20,7 @@ const ProductForm = ({
   price?: string;
   images?: any;
   category?: string;
+  properties?: string;
 }) => {
   const [title, setTitle] = useState<string>(existingTitle || '');
   const [description, setDescription] = useState<string>(existingDescription || '');
@@ -28,7 +30,7 @@ const ProductForm = ({
   const [category, setCategory] = useState<any>(assignedCategory || '');
   const [images, setImages] = useState<any[]>(existingImages || []);
   const [isUploading, setIsUploading] = useState<boolean>(false);
-  const [productProperties, setProductProperties] = useState<any>({});
+  const [productProperties, setProductProperties] = useState<any>(assignedProperties || {});
   const router = useRouter();
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const ProductForm = ({
   
   async function saveProduct(event: any) {
     event.preventDefault();
-    const data = { title, description, price, category, images, productProperties }; // Add images to the data
+    const data = { title, description, price, category, images, properties:productProperties }; // Add images to the data
     if (_id) {
       // Update
       await axios.put("/api/products", { ...data, _id });
@@ -96,16 +98,37 @@ const ProductForm = ({
     })
   }
 
-  const propertiesToFill = [];
-  if (categories.length > 0 && category) {
-    let catInfo = categories.find(({_id}) => _id === category);
-    propertiesToFill.push(...catInfo.properties);
-    while(catInfo.parent?.id) {
-      const parentCat = categories.find(({_id}) => _id === category);
-      propertiesToFill.push(parentCat.properties);
-      catInfo = parentCat;
+  // const propertiesToFill = []; //define propertiesToFill as empty array to store properties
+  // if (categories.length > 0 && category) { //if categories array is not empty and category has value
+  //   let catInfo = categories.find(({_id}) => _id === category); //fine the category object in categories whose _id matches the category value
+  //   propertiesToFill.push(...catInfo?.properties); //add all properties of the found category (catInfo) to propertyToFill array
+  //   while(catInfo.parent?.id) { //if the current category have parent category (check if category.parent?.id exists)
+  //     const parentCat = categories.find(({_id}) => _id === category); //fine the parent category by its _id (the _id of catInfo.parent)
+  //     propertiesToFill.push(...parentCat.properties); //add all properties of parent category to propertiesToFill array
+  //     catInfo = parentCat; //Update catInfo to point to the parent category and continue the loop
+  //   }
+  // }
+  const propertiesToFill: any[] = []; // Initialize propertiesToFill as an empty array
+    if (categories.length > 0 && category) {
+      let catInfo = categories.find(({ _id }) => _id === category); // Find the category object with matching _id
+
+      // Ensure catInfo and catInfo.properties are defined before spreading
+      if (catInfo?.properties?.length > 0) {
+        propertiesToFill.push(...catInfo.properties);
+      }
+
+      // Loop through parent categories, if any
+      while (catInfo?.parent?.id) {
+        const parentCat = categories.find(({ _id }) => _id === catInfo.parent.id); // Find the parent category
+
+        // Ensure parentCat and parentCat.properties are defined before spreading
+        if (parentCat?.properties?.length > 0) {
+          propertiesToFill.push(...parentCat.properties);
+        }
+        catInfo = parentCat; // Update catInfo to point to the parent category
+      }
     }
-  }
+
 
   return (
     <form onSubmit={saveProduct}>
@@ -127,23 +150,29 @@ const ProductForm = ({
 
       {propertiesToFill.length > 0 && propertiesToFill.map((p: any, idx: number) => (
         <div key={idx}>
-          <div>{p.name}</div>
-          <select 
-            value={productProperties[p.name]} 
-            onChange={(e) => setProductProp(p.name, e.target.value)}
-          >
-            {p.values.map((v: any, idx: number) => (
-              <option value={v} key={idx}>{v}</option>
-            ))}
-          </select>
+          <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
+          <div>
+            <select 
+              value={productProperties[p.name]} 
+              onChange={(e) => setProductProp(p.name, e.target.value)}
+            >
+              {p.values.map((v: any, idx: number) => (
+                <option value={v} key={idx}>{v}</option>
+              ))}
+            </select>
+          </div>
         </div>
       ))}
 
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
-        <ReactSortable list={images} setList={uploadImagesOrder} className="flex flex-wrap gap-1">
+        <ReactSortable 
+          list={images} 
+          setList={uploadImagesOrder} 
+          className="flex flex-wrap gap-1"
+        >
           {!!images.length && images.map((url: string, idx: number) => (
-            <div key={idx} className="inline-block h-24">
+            <div key={idx} className="h-24 p-4 shadow-sm rounded-sm border border-gray-200">
               <img 
                 src={url} 
                 alt={`Product image ${idx + 1}`} 
@@ -158,7 +187,25 @@ const ProductForm = ({
           </div>
         )}
 
-        <label className="w-24 h-24 cursor-pointer text-center flex items-center justify-center text-sm text-gray-500 rounded-md bg-gray-200">
+        <label 
+          className="
+            w-24 
+            h-24 
+            cursor-pointer 
+            text-center 
+            flex 
+            items-center 
+            justify-center 
+            text-sm 
+            text-primary
+            rounded-sm 
+            bg-white 
+            shadow-sm 
+            border 
+            border-primary
+            flex-col
+          "
+        >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 
@@ -175,7 +222,7 @@ const ProductForm = ({
             />
           </svg>
           <div>
-            Upload
+            Add image
           </div>
           <input type="file" className="hidden" onChange={uploadImages}/>
         </label>

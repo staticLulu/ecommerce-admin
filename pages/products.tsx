@@ -16,7 +16,7 @@ const products = () => {
     <Layout>
       <Link 
         href={'/products/new'} 
-        className="bg-blue-900 text-white rounded-md py-1 px-2"
+        className="btn-primary"
       >
         Add new products
       </Link>
@@ -34,7 +34,7 @@ const products = () => {
             <tr key={idx}>
               <td>{product.title}</td>
               <td>
-                <Link href={"/products/edit/"+product._id}>
+                <Link href={"/products/edit/"+product._id} className="btn-default">
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" 
@@ -55,7 +55,7 @@ const products = () => {
                   Edit
                 </Link>
 
-                <Link href={'/products/delete/'+product._id}>
+                <Link href={'/products/delete/'+product._id} className="btn-red">
                   <svg 
                     xmlns="http://www.w3.org/2000/svg" 
                     fill="none" 

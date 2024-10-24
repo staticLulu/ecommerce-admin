@@ -1,11 +1,17 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
 import { NextApiRequest, NextApiResponse } from "next";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
-  console.log("HTTP?", method)
+
   await mongooseConnect();
+  try {
+    await isAdminRequest(req, res);
+  } catch (error) {
+    return res.status(403).json({ error: 'Unauthorized access' });
+  }
 
   if (method === 'GET') {
     // GET: Fetch products or a single product by id
