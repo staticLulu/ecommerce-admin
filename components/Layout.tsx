@@ -12,7 +12,7 @@ export default function Layout({children}:{children: any}) {
         <div className="text-center w-full">
           <button 
             onClick={() => signIn("google")} 
-            className="bg-white py-2 px-4 rounded-lg"
+            className="bg-primary text-white shadow-md py-3 px-4 rounded-lg"
           >
             Login in with google
           </button>
