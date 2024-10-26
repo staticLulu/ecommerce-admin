@@ -7,15 +7,15 @@ const adminEmails = ['dang.dangmakara@gmail.com'];
 
 export const authOptions = {
   providers: [
-    // OAuth authentication providers...
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET
     }),   
   ],
   adapter: MongoDBAdapter(client),
+  secret: process.env.NEXTAUTH_SECRET,  // Add the secret here
   callbacks: {
-    session: ({session,token,user}) => {
+    session: ({ session, token, user }) => {
       if (adminEmails.includes(session?.user?.email)) {
         return session;
       } else {
@@ -23,7 +23,7 @@ export const authOptions = {
       }
     },
   },
-}
+};
 
 export default NextAuth(authOptions);
 
