@@ -1,5 +1,5 @@
 
-# E-commerce Admin
+# E-commerce Admin🌸
 
 ## Overview
    E-commerce admin is intergrate for customization products by ourselves, admin or user of E-commerce admin project can login using google gmail account, we can view all reports or all product items by its category, ordering, settings and dashboard graphs etc.
