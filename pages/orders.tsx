@@ -1,11 +1,16 @@
 import Layout from "@/components/Layout"
-import { useEffect } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const OrdersPage = () => {
+  const [orders, setOrders] = useState<any>([]);
 
   useEffect(() => {
-    
+    axios.get('/api/orders').then(response => {
+      setOrders(response.data)
+    });
   }, []);
+
   return (
     <Layout>
       <h1>Orders</h1>
@@ -13,15 +18,35 @@ const OrdersPage = () => {
       <table className="basic">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Date</th>
+            <th>Paid</th>
             <th>Recipient</th>
             <th>Products</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td></td>
-          </tr>
+          {orders.length > 0 && orders.map((order: any, idx: number) => (
+            <tr key={idx}>
+              <td>{(new Date(order.createdAt)).toLocaleDateString()}</td>
+              <td 
+                className={order.paid ? "text-green-500" : "text-red-500"}
+              >
+                {order.paid ? 'YES' : 'NO'}
+              </td>
+              <td>
+                {order.name} {order.email} <br />
+                {order.city} {order.postalCode} {order.country} <br />
+                {order.streetAddress}
+              </td>
+              <td>
+                {order.line_items.map((l: any, idx: number) => (
+                  <div key={idx}>
+                    {l.price_data.product_data?.name} x {l.quantity}
+                  </div>
+                ))}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </Layout>
