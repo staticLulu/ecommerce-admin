@@ -2,7 +2,8 @@ import "@/styles/globals.css";
 import { SessionProvider } from "next-auth/react";
 import { AppProps } from "next/app";
 import { Session } from "next-auth";
-
+import { ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { ThemeProvider } from "next-themes"
 interface CustomAppProps extends AppProps {
   pageProps: {
     session?: Session;
@@ -13,7 +14,12 @@ interface CustomAppProps extends AppProps {
 export default function App({ Component, pageProps: { session, ...pageProps } }: CustomAppProps) {
   return (
     <SessionProvider session={session}>
-      <Component {...pageProps} />
+      <ChakraProvider value={defaultSystem}>
+        <ThemeProvider attribute="class" disableTransitionOnChange>
+          <Component {...pageProps} />
+        </ThemeProvider>
+
+      </ChakraProvider>
     </SessionProvider>
   );
 }

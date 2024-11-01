@@ -4,6 +4,9 @@ import axios from "axios";
 import Image from "next/image";
 import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
+import { Box, HStack, Input, Stack } from "@chakra-ui/react";
+import { Field } from "@/components/ui/field"
+import CustomLabel from "./LabelCustom";
 
 const ProductForm = ({
   _id,
@@ -98,16 +101,6 @@ const ProductForm = ({
     })
   }
 
-  // const propertiesToFill = []; //define propertiesToFill as empty array to store properties
-  // if (categories.length > 0 && category) { //if categories array is not empty and category has value
-  //   let catInfo = categories.find(({_id}) => _id === category); //fine the category object in categories whose _id matches the category value
-  //   propertiesToFill.push(...catInfo?.properties); //add all properties of the found category (catInfo) to propertyToFill array
-  //   while(catInfo.parent?.id) { //if the current category have parent category (check if category.parent?.id exists)
-  //     const parentCat = categories.find(({_id}) => _id === category); //fine the parent category by its _id (the _id of catInfo.parent)
-  //     propertiesToFill.push(...parentCat.properties); //add all properties of parent category to propertiesToFill array
-  //     catInfo = parentCat; //Update catInfo to point to the parent category and continue the loop
-  //   }
-  // }
   const propertiesToFill: any[] = []; // Initialize propertiesToFill as an empty array
     if (categories.length > 0 && category) {
       let catInfo = categories.find(({ _id }) => _id === category); // Find the category object with matching _id
@@ -131,22 +124,41 @@ const ProductForm = ({
 
 
   return (
-    <form onSubmit={saveProduct}>
-      <label>Product name</label>
-      <input 
-        type="text" 
-        placeholder="product name" 
-        value={title}
-        onChange={(event: any) => setTitle(event.target.value)}
-      />
+    <form 
+      onSubmit={saveProduct} 
+      className="
+        p-5 
+        bg-white 
+        rounded-lg 
+        shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)]
+      "
+    >
+      <Stack className="w-full !grid grid-cols-2">
+        <Box>
+          <CustomLabel name="Product name" />
+          <input 
+            type="text" 
+            placeholder="product name" 
+            value={title}
+            onChange={(event: any) => setTitle(event.target.value)}
+            className="!mb-0 rounded-lg"
+          />
+        </Box>
 
-      <label>Category</label>
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
-        <option value="">Uncategorized</option>
-        {categories.length > 0 && categories.map((c: any, idx: number) => (
-          <option value={c._id} key={idx}>{c.name}</option>
-        ))}
-      </select>
+        <Box className="grid">
+          <CustomLabel name="Category" />
+          <select 
+            value={category} 
+            onChange={(e) => setCategory(e.target.value)}
+            className="pt-3 rounded-lg"
+          >
+            <option value="">Uncategorized</option>
+            {categories.length > 0 && categories.map((c: any, idx: number) => (
+              <option value={c._id} key={idx}>{c.name}</option>
+            ))}
+          </select>
+        </Box>
+      </Stack>
 
       {propertiesToFill.length > 0 && propertiesToFill.map((p: any, idx: number) => (
         <div key={idx}>
@@ -164,7 +176,7 @@ const ProductForm = ({
         </div>
       ))}
 
-      <label>Photos</label>
+      <CustomLabel name="Photos" />
       <div className="mb-2 flex flex-wrap gap-1">
         <ReactSortable 
           list={images} 
@@ -197,12 +209,14 @@ const ProductForm = ({
             items-center 
             justify-center 
             text-sm 
-            text-primary
-            rounded-sm 
+            text-green-700/60
+            rounded-lg 
             bg-white 
+            hover:bg-green-700/20
+            hover:text-white
             shadow-sm 
             border 
-            border-primary
+            border-green-700/20
             flex-col
           "
         >
@@ -228,24 +242,38 @@ const ProductForm = ({
         </label>
       </div>
 
-
-      <label>Description</label>
+      <CustomLabel name="Description" />
       <textarea 
         placeholder="description" 
         value={description}
         onChange={(event: any) => setDescription(event.target.value)}
+        className="rounded-lg"
       />
-      <label>Price (in USD)</label>
+      <CustomLabel name="Price (in USD)" />
       <input 
         type="number" 
         placeholder="price" 
         value={price}
         onChange={(event: any) => setPrice(event.target.value)}
+        className="rounded-lg"
       />
       <button 
         type="submit"
-        className="btn-primary"
-      >Save</button>
+        className="
+          bg-green-700/40 
+          hover:bg-green-700/20 
+          px-3 
+          py-1 
+          rounded-md 
+          text-white 
+          text-base
+          flex 
+          justify-self-end
+          mt-4
+        "
+      >
+        Save
+      </button>
     </form>
   );
 }

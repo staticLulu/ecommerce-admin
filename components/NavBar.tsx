@@ -18,7 +18,7 @@ const NavBar = ({show}:{show: any}) => {
 
 
   return (
-    <aside className={(show?'left-0':'-left-full')+' top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto transition-all'}>
+    <aside className={(show?'left-0':'-left-full')+' top-0 text-gray-500 p-4 fixed w-full h-[95vh] bg-primary-gradient border border-slate-200 shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] md:static md:w-auto transition-all rounded-xl'}>
       <div className="mr-4 mb-4">
         <Logo />
       </div>
@@ -39,7 +39,10 @@ const NavBar = ({show}:{show: any}) => {
           Dashboard
         </Link>
 
-        <Link href={"/products"} className={pathname.includes("/products") ? activeLink : InactiveLink}>
+        <Link 
+          href={"/products"} 
+          className={pathname.includes("/products") ? activeLink : InactiveLink}
+        >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 
@@ -84,7 +87,7 @@ const NavBar = ({show}:{show: any}) => {
           Orders
         </Link>
 
-        <Link href={"/settings"} className={pathname.includes("/settings") ? activeLink : InactiveLink}>
+        {/* <Link href={"/settings"} className={pathname.includes("/settings") ? activeLink : InactiveLink}>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 
@@ -98,10 +101,17 @@ const NavBar = ({show}:{show: any}) => {
           </svg>
 
           Settings
-        </Link>
+        </Link> */}
 
         <button onClick={() =>Logout()} className={InactiveLink}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            strokeWidth={1.5} 
+            stroke="currentColor" 
+            className="size-6"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
           </svg>
 
