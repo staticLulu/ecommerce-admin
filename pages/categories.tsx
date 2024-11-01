@@ -1,4 +1,7 @@
+import CustomLabel from "@/components/LabelCustom";
 import Layout from "@/components/Layout";
+import TitleSection from "@/components/Title";
+import { Box, Stack, Table } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { withSwal } from 'react-sweetalert2';
@@ -103,40 +106,49 @@ function Categories({swal}: any) {
 
   return (
     <Layout>
-      <h1>Categories</h1>
-      <label>{editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"}</label>
+      <TitleSection title={editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"} />
 
       <form onSubmit={saveCategory}>
-        <div className="flex gap-1">
-          <input 
-            type="text" 
-            placeholder="Category name" 
-            value={name} 
-            onChange={(e) => setName(e.target.value)}
-          />
+        <Stack className="!grid grid-cols-2 gap-1">
+          <Box>
+            <CustomLabel name="Category name" />
+            <input 
+              type="text" 
+              placeholder="Category name" 
+              value={name} 
+              onChange={(e) => setName(e.target.value)}
+            />
 
-          <select 
-            value={parentCategory}
-            onChange={(e) => setParentCategory(e.target.value)}
-          >
-            <option value="">No parent category</option>
-            {categories.length > 0 && categories
-              .filter((category:any) => category._id !== editedCategory?._id) // Exclude the currently edited category
-              .map((category:any, idx: number) => (
-                <option value={category._id} key={idx}>{category.name}</option>
-              ))}
-          </select>
-        </div>
+          </Box>
+          
+          <Box>
+            <CustomLabel name="Category name" />
+            <select 
+              value={parentCategory}
+              onChange={(e) => setParentCategory(e.target.value)}
+              className="pt-3"
+            >
+              <option value="">No parent category</option>
+              {categories.length > 0 && categories
+                .filter((category:any) => category._id !== editedCategory?._id) // Exclude the currently edited category
+                .map((category:any, idx: number) => (
+                  <option value={category._id} key={idx}>{category.name}</option>
+                ))}
+            </select>
+          </Box>
+        </Stack>
 
-        <div className="mb-2">
-          <label className="block">Properties</label>
-          <button 
-            onClick={addProperty}
-            type="button" 
-            className="btn-default text-sm mb-2"
-          >
-            Add new property
-          </button>
+        <div className="mb-2 mt-5">
+          <Box className="grid">
+            <CustomLabel name="Properties" />
+            <button 
+              onClick={addProperty}
+              type="button" 
+              className="btn-default text-sm mb-2 w-fit mt-2"
+            >
+              Add new property
+            </button>
+          </Box>
           {properties.length > 0 && properties.map((property: any, idx: number) => (
             <div className="flex gap-1 mb-2" key={idx}>
               <input 
@@ -191,45 +203,62 @@ function Categories({swal}: any) {
 
           <button 
             type="submit" 
-            className="btn-primary py-1"
+            className="
+              bg-green-700/40 
+              px-4 
+              py-1.5 
+              rounded-lg 
+              text-white
+            "
           >
             Save
           </button>
         </div>
 
         {!editedCategory && (
-          <table className="basic mt-4">
-            <thead>
-              <tr>
-                <td>Category Name</td>
-                <td>Parent category</td>
-                <td></td>
-              </tr>
-            </thead>
+          <Table.Root 
+            striped 
+            size="md" 
+            variant={"outline"} 
+            className="
+              shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] 
+              rounded-xl 
+              border 
+              border-slate-200
+              mt-6
+            "
+          >
+            <Table.Header className="bg-primary-gradient">
+              <Table.Row>
+                <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Category Name</Table.ColumnHeader>
+                <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Parent category</Table.ColumnHeader>
+                <Table.ColumnHeader></Table.ColumnHeader>
+              </Table.Row>
+            </Table.Header>
 
-            <tbody>
+            <Table.Body>
               {categories.length > 0 && categories.map((category:any, idx: number) => (
-                <tr key={idx}>
-                  <td>{category.name}</td>
-                  <td>{category?.parent?.name}</td>
-                  <td>
+                <Table.Row key={idx}>
+                  <Table.Cell>{category.name}</Table.Cell>
+                  <Table.Cell>{category?.parent?.name}</Table.Cell>
+                  <Table.Cell>
                     <button
                       type="button"
-                      className="btn-default mr-1"
+                      className="btn-default mr-1 !rounded-md"
                       onClick={() => editCategory(category)}
                     >
                       Edit
                     </button>
                     <button 
                       type="button"
-                      className="btn-red"
+                      className="btn-red !rounded-md"
                       onClick={() => deleteCategory(category)}
                     >Delete</button>
-                  </td>
-                </tr>
+                  </Table.Cell>
+                </Table.Row>
               ))}
-            </tbody>
-          </table>
+            </Table.Body>
+          </Table.Root>
         )}
       </form>
 

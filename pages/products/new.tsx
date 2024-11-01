@@ -1,10 +1,12 @@
 import Layout from "@/components/Layout";
 import ProductForm from "@/components/ProductForm";
+import TitleSection from "@/components/Title";
+import { Text } from "@chakra-ui/react";
 
 const NewProduct = () => {
   return (
     <Layout>
-      <h1>New Product</h1>
+      <TitleSection title="New Product" />
       <ProductForm/>
     </Layout>
   )
