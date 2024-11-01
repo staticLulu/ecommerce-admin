@@ -33,7 +33,12 @@ To set up and run this project locally:
 
     yarn install
 
-### 4. Start the development server:
+### 4. Run development server:
 
     yarn dev
+
+### 5. Run production server:
+
+    yarn build
+    yarn start
 
