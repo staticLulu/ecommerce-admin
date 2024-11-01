@@ -15,6 +15,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        "primary-gradient": "linear-gradient(44deg, rgba(187,247,208,0.11808473389355745) 0%, rgba(187,247,208,0.2189250700280112) 100%);"
+      }
     },
   },
   plugins: [],

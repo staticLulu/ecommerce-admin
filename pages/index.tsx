@@ -7,7 +7,19 @@ export default function Home() {
   
   return (
    <Layout>
-      <div className="text-blue-900 flex justify-between">
+      <div 
+        className="
+          text-blue-900 
+          flex 
+          justify-between 
+          p-4 
+          rounded-xl
+          bg-primary-gradient 
+          border
+          border-slate-200
+          shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)]
+        "
+      >
         <h2>Hello, <b>{session?.user?.name}</b></h2>
         
         {/* {JSON.stringify(session)} */}

@@ -18,7 +18,7 @@ const NavBar = ({show}:{show: any}) => {
 
 
   return (
-    <aside className={(show?'left-0':'-left-full')+' top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto transition-all'}>
+    <aside className={(show?'left-0':'-left-full')+' top-0 text-gray-500 p-4 fixed w-full h-[95vh] bg-primary-gradient border border-slate-200 shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] md:static md:w-auto transition-all rounded-xl'}>
       <div className="mr-4 mb-4">
         <Logo />
       </div>
@@ -39,7 +39,10 @@ const NavBar = ({show}:{show: any}) => {
           Dashboard
         </Link>
 
-        <Link href={"/products"} className={pathname.includes("/products") ? activeLink : InactiveLink}>
+        <Link 
+          href={"/products"} 
+          className={pathname.includes("/products") ? activeLink : InactiveLink}
+        >
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 

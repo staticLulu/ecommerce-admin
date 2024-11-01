@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout"
+import { Table } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -15,40 +16,51 @@ const OrdersPage = () => {
     <Layout>
       <h1>Orders</h1>
 
-      <table className="basic">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Paid</th>
-            <th>Recipient</th>
-            <th>Products</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table.Root
+        striped 
+        size="md" 
+        variant={"outline"} 
+        className="
+          shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] 
+          rounded-xl 
+          border 
+          border-slate-200
+          mt-6
+        "
+      >
+        <Table.Header className="bg-primary-gradient">
+          <Table.Row>
+            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Date</Table.ColumnHeader>
+            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Paid</Table.ColumnHeader>
+            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Recipient</Table.ColumnHeader>
+            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Products</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {orders.length > 0 && orders.map((order: any, idx: number) => (
-            <tr key={idx}>
-              <td>{(new Date(order.createdAt)).toLocaleDateString()}</td>
-              <td 
+            <Table.Row key={idx}>
+              <Table.Cell>{(new Date(order.createdAt)).toLocaleDateString()}</Table.Cell>
+              <Table.Cell 
                 className={order.paid ? "text-green-500" : "text-red-500"}
               >
                 {order.paid ? 'YES' : 'NO'}
-              </td>
-              <td>
+              </Table.Cell>
+              <Table.Cell>
                 {order.name} {order.email} <br />
                 {order.city} {order.postalCode} {order.country} <br />
                 {order.streetAddress}
-              </td>
-              <td>
+              </Table.Cell>
+              <Table.Cell>
                 {order.line_items.map((l: any, idx: number) => (
                   <div key={idx}>
                     {l.price_data.product_data?.name} x {l.quantity}
                   </div>
                 ))}
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table.Root>
     </Layout>
   )
 }

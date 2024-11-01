@@ -2,6 +2,7 @@ import NavBar from "@/components/NavBar";
 import { useSession, signIn } from "next-auth/react"
 import { useState } from "react";
 import Logo from "./Logo";
+import { Text } from "@chakra-ui/react";
 
 export default function Layout({children}:{children: any}) {
   const [showNavBar, setShowNavBar] = useState<boolean>(false);
@@ -12,7 +13,7 @@ export default function Layout({children}:{children: any}) {
         <div className="text-center w-full">
           <button 
             onClick={() => signIn("google")} 
-            className="bg-primary text-white shadow-md py-3 px-4 rounded-lg"
+            className="bg-green-700/40 text-white shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] py-3 px-4 rounded-lg"
           >
             Login in with google
           </button>
@@ -35,8 +36,10 @@ export default function Layout({children}:{children: any}) {
         </div>
       </div>
       <div className="flex">
-        <NavBar show={showNavBar}/>
-        <div className="flex-grow p-4">
+        <div className="p-5">
+          <NavBar show={showNavBar}/>
+        </div>
+        <div className="flex-grow py-5 pr-5">
           {children}
         </div>
       </div>
