@@ -4,8 +4,6 @@ import axios from "axios";
 import Image from "next/image";
 import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
-import { Box, HStack, Input, Stack } from "@chakra-ui/react";
-import { Field } from "@/components/ui/field"
 import CustomLabel from "./LabelCustom";
 
 const ProductForm = ({
@@ -133,8 +131,8 @@ const ProductForm = ({
         shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)]
       "
     >
-      <Stack className="w-full !grid grid-cols-2">
-        <Box>
+      <div className="w-full !grid grid-cols-2">
+        <div>
           <CustomLabel name="Product name" />
           <input 
             type="text" 
@@ -143,9 +141,9 @@ const ProductForm = ({
             onChange={(event: any) => setTitle(event.target.value)}
             className="!mb-0 rounded-lg"
           />
-        </Box>
+        </div>
 
-        <Box className="grid">
+        <div className="grid">
           <CustomLabel name="Category" />
           <select 
             value={category} 
@@ -157,8 +155,8 @@ const ProductForm = ({
               <option value={c._id} key={idx}>{c.name}</option>
             ))}
           </select>
-        </Box>
-      </Stack>
+        </div>
+      </div>
 
       {propertiesToFill.length > 0 && propertiesToFill.map((p: any, idx: number) => (
         <div key={idx}>

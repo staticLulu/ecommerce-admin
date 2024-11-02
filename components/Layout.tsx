@@ -2,7 +2,6 @@ import NavBar from "@/components/NavBar";
 import { useSession, signIn } from "next-auth/react"
 import { useState } from "react";
 import Logo from "./Logo";
-import { Text } from "@chakra-ui/react";
 
 export default function Layout({children}:{children: any}) {
   const [showNavBar, setShowNavBar] = useState<boolean>(false);
