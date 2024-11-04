@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout"
+import Layout from "@/components/Layout";
 import TitleSection from "@/components/Title";
 import { Button } from "@/components/ui/button";
 import { 
@@ -14,89 +14,72 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ExternalLinkIcon } from "@radix-ui/react-icons"
+import { ExternalLinkIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons";
+import { MyAlertDialog } from "@/components/MyAlertDialog";
 
-const products = () => {
-  const [products, setProducts] = useState<any>([]);
+const Products = () => {
+  const [products, setProducts] = useState<ProductListProps[]>([]);
   const router = useRouter();
 
   useEffect(() => {
     axios.get('/api/products').then(response => {
       setProducts(response.data);
-      
-    })
+    });
   }, []);
+
+  // Function to handle product deletion
+  const handleDeleteProduct = async (productId: string) => {
+    try {
+      await axios.delete(`/api/products?id=${productId}`);
+      setProducts((prevProducts) => prevProducts.filter(product => product._id !== productId));
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+  };
 
   return (
     <Layout>
       <TitleSection title="Product list" />
 
       <Button 
-        variant={"secondary"} 
-        className="bg-green-700/20 text-green-700"
+        variant="secondary" 
+        className="bg-myOldBlue/90 text-myText"
         onClick={() => router.push('/products/new')} 
       >
-        <svg 
-          xmlns="http://www.w3.org/2000/svg" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          strokeWidth={1.5} 
-          stroke="currentColor" 
-          className="size-5"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-        </svg>
+        <PlusIcon />
         Add new product
       </Button>
 
       <div 
-        className="
-          shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] 
-          max-h-[750px] 
-          overflow-auto 
-          mt-5 
-          rounded-lg
-        "
+        className="shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] max-h-[750px] overflow-auto mt-5 rounded-lg"
       >
         <Table>
-          <TableHeader className="bg-green-700/20">
+          <TableHeader className="bg-myOldBlue/90">
             <TableRow>
-              <TableHead className="text-green-700 uppercase bg">Product name</TableHead>
+              <TableHead className="text-myText uppercase font-bold">Product name</TableHead>
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product:ProductListProps, idx: number) => (
-              <TableRow key={idx}>
+            {products.map((product) => (
+              <TableRow key={product._id}>
                 <TableCell className="font-medium">{product.title}</TableCell>
                 <TableCell className="flex gap-2.5">
                   <Button 
-                    variant={"outline"}
-                    className="
-                      bg-green-700/20
-                      text-green-700
-                      hover:bg-green-700/10
-                      hover:text-green-400
-                    " 
-                    onClick={() => { router.push(`/products/edit/${product._id}`)}}
+                    variant="outline"
+                    className="bg-green-700/20 text-green-700 hover:bg-green-700/10 hover:text-green-400"
+                    onClick={() => router.push(`/products/edit/${product._id}`)}
                   >
                     <ExternalLinkIcon />
                     Edit
                   </Button>
 
-                  <Button 
-                    variant={"outline"}
-                    className="
-                      bg-red-400/60 
-                      text-red-700 
-                      hover:bg-red-400/30 
-                      hover:text-red-400
-                    " 
-                    onClick={() => { router.push(`/products/delete/${product._id}`)}}
-                  >
-                    <ExternalLinkIcon />
-                    Delete
-                  </Button>
+                  <MyAlertDialog
+                    triggerLabel="Delete"
+                    title="Are you absolutely sure?"
+                    description="This action cannot be undone. This will permanently delete this product and remove your data from our servers."
+                    onConfirm={() => handleDeleteProduct(product._id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -104,7 +87,7 @@ const products = () => {
         </Table>
       </div>
     </Layout>
-  )
-}
+  );
+};
 
-export default products;
+export default Products;

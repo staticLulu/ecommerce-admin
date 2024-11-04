@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Image from "next/image";
 import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
-import CustomLabel from "./LabelCustom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { UploadIcon } from "@radix-ui/react-icons";
+import { Textarea } from "./ui/textarea";
+import { Label } from "./ui/label";
+import LabelCustom from "./LabelCustom";
 
 const ProductForm = ({
   _id,
@@ -120,7 +125,6 @@ const ProductForm = ({
       }
     }
 
-
   return (
     <form 
       onSubmit={saveProduct} 
@@ -131,30 +135,32 @@ const ProductForm = ({
         shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)]
       "
     >
-      <div className="w-full !grid grid-cols-2">
+      <div className="w-full !grid md:grid-cols-2 gap-4">
         <div>
-          <CustomLabel name="Product name" />
-          <input 
+          <LabelCustom name="Product name" />
+          <Input 
+            placeholder="Product name" 
             type="text" 
-            placeholder="product name" 
-            value={title}
-            onChange={(event: any) => setTitle(event.target.value)}
-            className="!mb-0 rounded-lg"
+            value={title} 
+            onChange={(e: any) => setTitle(e.target.value)} 
           />
         </div>
 
         <div className="grid">
-          <CustomLabel name="Category" />
-          <select 
-            value={category} 
-            onChange={(e) => setCategory(e.target.value)}
-            className="pt-3 rounded-lg"
+          <LabelCustom name="Category" />
+          <Select
+            value={category}
+            onValueChange={(value) => setCategory(value)}
           >
-            <option value="">Uncategorized</option>
-            {categories.length > 0 && categories.map((c: any, idx: number) => (
-              <option value={c._id} key={idx}>{c.name}</option>
-            ))}
-          </select>
+            <SelectTrigger>
+              <SelectValue placeholder="Uncategorized" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.length > 0 && categories.map((c, idx) => (
+                <SelectItem value={c._id} key={idx}>{c.name}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
@@ -174,104 +180,108 @@ const ProductForm = ({
         </div>
       ))}
 
-      <CustomLabel name="Photos" />
-      <div className="mb-2 flex flex-wrap gap-1">
-        <ReactSortable 
-          list={images} 
-          setList={uploadImagesOrder} 
-          className="flex flex-wrap gap-1"
-        >
-          {!!images.length && images.map((url: string, idx: number) => (
-            <div key={idx} className="h-24 p-4 shadow-sm rounded-sm border border-gray-200">
-              <img 
-                src={url} 
-                alt={`Product image ${idx + 1}`} 
-                className="rounded-lg" // Add any styling you need
-              />
-            </div>
-          ))}
-        </ReactSortable>
-        {isUploading && (
-          <div className="h-24 bg-gray-200 flex p-1 items-center">
-            <Spinner />
-          </div>
-        )}
+      <div className="grid md:grid-cols-2 gap-5 mt-4">
+        <div>
+          <LabelCustom name="Photos" />
+          <div className="mb-2 flex flex-wrap gap-1">
+            <ReactSortable 
+              list={images} 
+              setList={uploadImagesOrder} 
+              className="flex flex-wrap gap-1"
+            >
+              {!!images.length && images.map((url: string, idx: number) => (
+                <div key={idx} className="h-32 w-32 p-4 shadow-sm rounded-sm border border-gray-200">
+                  <img 
+                    src={url} 
+                    alt={`Product image ${idx + 1}`} 
+                    className="rounded-lg w-[180px] h-[180px] object-cover object-center"
+                  />
+                </div>
+              ))}
+            </ReactSortable>
+            {isUploading && (
+              <div className="h-32 w-32 bg-gray-200 !flex p-1 items-center justify-center">
+                <Spinner />
+              </div>
+            )}
 
-        <label 
-          className="
-            w-24 
-            h-24 
-            cursor-pointer 
-            text-center 
-            flex 
-            items-center 
-            justify-center 
-            text-sm 
-            text-green-700/60
-            rounded-lg 
-            bg-white 
-            hover:bg-green-700/20
-            hover:text-white
-            shadow-sm 
-            border 
-            border-green-700/20
-            flex-col
-          "
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            strokeWidth={1.5} 
-            stroke="currentColor" 
-            className="size-6"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 
-              3m0 0 4.5 4.5M12 3v13.5" 
-            />
-          </svg>
-          <div>
-            Add image
+            <Label 
+              className="
+                w-32
+                h-32 
+                cursor-pointer 
+                text-center 
+                flex 
+                items-center 
+                justify-center 
+                text-base
+                text-myOldBlue/90
+                rounded-lg 
+                bg-white 
+                shadow-sm 
+                border 
+                border-myOldBlue/10
+                flex-col
+              "
+            >
+              <UploadIcon width={28} height={28} />
+              Add image
+              <input type="file" className="hidden" onChange={uploadImages}/>
+            </Label>
           </div>
-          <input type="file" className="hidden" onChange={uploadImages}/>
-        </label>
+        </div>
+        <div>
+          <LabelCustom name="Description" />
+          <Textarea 
+            placeholder="Type your message here." 
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="min-h-[150px]"
+          />
+        </div>
       </div>
 
-      <CustomLabel name="Description" />
-      <textarea 
-        placeholder="description" 
-        value={description}
-        onChange={(event: any) => setDescription(event.target.value)}
-        className="rounded-lg"
-      />
-      <CustomLabel name="Price (in USD)" />
-      <input 
-        type="number" 
-        placeholder="price" 
-        value={price}
-        onChange={(event: any) => setPrice(event.target.value)}
-        className="rounded-lg"
-      />
-      <button 
-        type="submit"
+      <div className="mt-4">
+        <LabelCustom name="Price (in USD)" />
+        <input 
+          type="number" 
+          placeholder="price" 
+          value={price}
+          onChange={(event: any) => setPrice(event.target.value)}
+          className="rounded-lg"
+        />
+      </div>
+     
+     <div className="flex gap-2 mt-5 justify-end">
+      <Button 
+        type="button" 
         className="
-          bg-green-700/40 
-          hover:bg-green-700/20 
-          px-3 
+          bg-transparent
+          hover:bg-myOldBlue/10
+          border
+          border-slate-300
+          px-4 
           py-1 
-          rounded-md 
-          text-white 
-          text-base
-          flex 
-          justify-self-end
-          mt-4
+          text-slate-500 
+        "
+        onClick={() => router.back()}
+      >
+        Cancel
+      </Button>
+
+      <Button 
+        type="submit" 
+        className="
+          bg-myOldBlue/90 
+          hover:bg-myOldBlue/60 
+          px-4 
+          py-1 
+          text-myText 
         "
       >
         Save
-      </button>
+      </Button>
+     </div>
     </form>
   );
 }

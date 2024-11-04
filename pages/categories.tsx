@@ -1,4 +1,11 @@
+import LabelCustom from "@/components/LabelCustom";
 import Layout from "@/components/Layout";
+import TitleSection from "@/components/Title";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { withSwal } from 'react-sweetalert2';
@@ -60,7 +67,7 @@ function Categories({swal}: any) {
       showCancelButton: true, // This enables the cancel button
       cancelButtonText: 'Cancel',
       confirmButtonText: 'Yes, Delete',
-      confirmButtonColor: '#d55',
+      confirmButtonColor: '#ef4444',
       reverseButtons: true
     }).then( async (result: any) => {
       if (result.isConfirmed) {
@@ -103,46 +110,52 @@ function Categories({swal}: any) {
 
   return (
     <Layout>
-      <h1>Categories</h1>
-      <label>{editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"}</label>
+      <TitleSection title="Categories" />
+      <LabelCustom name={editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"} />
 
-      <form onSubmit={saveCategory}>
+      <form onSubmit={saveCategory} className="grid gap-4">
         <div className="flex gap-1">
-          <input 
+          <Input 
             type="text" 
             placeholder="Category name" 
             value={name} 
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)} 
           />
 
-          <select 
+          <Select
             value={parentCategory}
-            onChange={(e) => setParentCategory(e.target.value)}
+            onValueChange={(value) => setParentCategory(value)} // `onValueChange` returns the value directly
           >
-            <option value="">No parent category</option>
-            {categories.length > 0 && categories
-              .filter((category:any) => category._id !== editedCategory?._id) // Exclude the currently edited category
-              .map((category:any, idx: number) => (
-                <option value={category._id} key={idx}>{category.name}</option>
+            <SelectTrigger>
+              <SelectValue placeholder="No parent category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.length > 0 && categories.map((category: any) => (
+                <SelectItem value={category._id} key={category._id}>
+                  {category.name}
+                </SelectItem>
               ))}
-          </select>
+            </SelectContent>
+          </Select>
         </div>
 
-        <div className="mb-2">
-          <label className="block">Properties</label>
-          <button 
-            onClick={addProperty}
-            type="button" 
-            className="btn-default text-sm mb-2"
-          >
-            Add new property
-          </button>
+        <div>
+          <div className="grid">
+            <LabelCustom name="Properties" />
+            <Button 
+              onClick={addProperty} 
+              type="button" 
+              className="w-fit bg-myOldBlue/90 text-myText mb-2 hover:bg-myOldBlue/70"
+            >
+              Add new property
+            </Button>
+          </div>
+
           {properties.length > 0 && properties.map((property: any, idx: number) => (
-            <div className="flex gap-1 mb-2" key={idx}>
-              <input 
+            <div className="flex gap-2 py-2" key={idx}>
+              <Input 
                 type="text" 
                 value={property.name} 
-                className="mb-0"
                 onChange={(e) =>handlePropertyNameChange(
                   idx, 
                   property, 
@@ -150,10 +163,9 @@ function Categories({swal}: any) {
                 )}
                 placeholder="property name (example: color)" 
               />
-              <input 
+              <Input 
                 type="text" 
                 value={property.values} 
-                className="mb-0"
                 onChange={(e) =>handlePropertyValueChange(
                   idx, 
                   property, 
@@ -162,20 +174,20 @@ function Categories({swal}: any) {
                 placeholder="values, comma separated" 
               />
 
-              <button 
+              <Button 
                 onClick={() => removeProperty(idx)}
-                className="btn-red"
+                className="bg-red-500 hover:bg-red-500/80"
                 type="button"
               >
                 Remove
-              </button>
+              </Button>
             </div>
           ))}
         </div>
-        
+
         <div className="flex gap-1">
           {editedCategory && (
-            <button 
+            <Button 
               type="submit" 
               className="btn-default py-1"
               onClick={() => {
@@ -186,50 +198,50 @@ function Categories({swal}: any) {
               }}
             >
               Cancel
-            </button>
+            </Button>
           )}
 
-          <button 
-            type="submit" 
-            className="btn-primary py-1"
-          >
+          <Button type="submit" className="bg-myOldBlue/90 hover:bg-myOldBlue/70">
             Save
-          </button>
+          </Button>
         </div>
 
         {!editedCategory && (
-          <table className="basic mt-4">
-            <thead>
-              <tr>
-                <td>Category Name</td>
-                <td>Parent category</td>
-                <td></td>
-              </tr>
-            </thead>
-
-            <tbody>
+          <div className="shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] max-h-[750px] overflow-auto mt-5 rounded-lg">
+            <Table>
+              <TableHeader className="bg-myOldBlue/90">
+                <TableRow>
+                  <TableHead className="text-myText uppercase font-bold">Category Name</TableHead>
+                  <TableHead className="text-myText uppercase font-bold">Parent category</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
               {categories.length > 0 && categories.map((category:any, idx: number) => (
-                <tr key={idx}>
-                  <td>{category.name}</td>
-                  <td>{category?.parent?.name}</td>
-                  <td>
-                    <button
-                      type="button"
-                      className="btn-default mr-1"
-                      onClick={() => editCategory(category)}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      type="button"
-                      className="btn-red"
-                      onClick={() => deleteCategory(category)}
-                    >Delete</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  <TableRow key={idx}>
+                    <TableCell>{category.name}</TableCell>
+                    <TableCell>{category?.parent?.name}</TableCell>
+                    <TableCell className="flex gap-2.5">
+                      <Button
+                        type="button"
+                          className="bg-green-700/20 text-green-700 hover:bg-green-700/10 hover:text-green-400"
+                        onClick={() => editCategory(category)}
+                      >
+                        Edit
+                      </Button>
+                      <Button 
+                        type="button"
+                        className="btn-red hover:bg-red-200 hover:text-myText"
+                        onClick={() => deleteCategory(category)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </form>
 

@@ -15,6 +15,8 @@ const config: Config = {
   				foreground: 'hsl(var(--primary-foreground))'
   			},
   			hightlight: '#eae8fb',
+				myText: '#F4F6FF',
+				myOldBlue: '#10375C',
   			bgGray: '#fbfafd',
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -54,7 +56,7 @@ const config: Config = {
   			}
   		},
   		backgroundImage: {
-  			'primary-gradient': 'linear-gradient(44deg, rgba(187,247,208,0.11808473389355745) 0%, rgba(187,247,208,0.2189250700280112) 100%);'
+  			'primary-gradient': 'linear-gradient(120deg, rgba(243,198,35,0.700717787114846) 0%, rgba(235,131,23,0.7147233893557423) 50%);'
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
