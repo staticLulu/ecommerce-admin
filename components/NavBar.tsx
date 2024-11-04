@@ -5,7 +5,7 @@ import Logo from "./Logo";
 
 const NavBar = ({show}:{show: any}) => {
   const InactiveLink = "flex gap-1 p-1";
-  const activeLink = InactiveLink+" bg-hightlight text-black rounded-sm";
+  const activeLink = InactiveLink+" bg-myText text-black rounded-sm";
   const inactiveIcon = 'w-6 w-6';
   const activeIcon = inactiveIcon+ ' text-primary';
   const router = useRouter();
@@ -18,12 +18,10 @@ const NavBar = ({show}:{show: any}) => {
 
 
   return (
-    <aside className={(show?'left-0':'-left-full')+' top-0 text-gray-500 p-4 fixed w-full h-[95vh] bg-primary-gradient border border-slate-200 shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] md:static md:w-auto transition-all rounded-xl'}>
-      <div className="mr-4 mb-4">
-        <Logo />
-      </div>
+    <aside className={(show?'left-0':'-left-full')+' z-50 top-0 text-myText p-4 fixed w-full h-[95vh] bg-myOldBlue border border-slate-200 shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] md:static md:w-auto transition-all rounded-xl'}>
+      <Logo />
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2 mt-10">
         <Link href={"/"} className={pathname === "/" ? activeLink : InactiveLink}>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 

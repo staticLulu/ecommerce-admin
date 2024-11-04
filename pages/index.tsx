@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import Image from "next/image"; // Import Image from next/image
 
@@ -9,12 +10,14 @@ export default function Home() {
    <Layout>
       <div 
         className="
-          text-blue-900 
+          text-myText 
           flex 
           justify-between 
-          p-4 
+          items-center
+          px-4 
+          py-2
           rounded-xl
-          bg-primary-gradient 
+          bg-myOldBlue/90
           border
           border-slate-200
           shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)]
@@ -23,17 +26,13 @@ export default function Home() {
         <h2>Hello, <b>{session?.user?.name}</b></h2>
         
         {/* {JSON.stringify(session)} */}
-        <div className="flex bg-gray-300 gap-1 text-black rounded-lg overflow-hidden">
-          <Image 
-            src={session?.user?.image as any}
-            alt="Profile Image"
-            width={24}
-            height={24}
-            className=""
-          />
-          <span className="px-2"></span>
-          {session?.user?.name}
+        <div className="flex gap-2 text-black rounded-lg overflow-hidden items-center">
+        <Avatar>
+          <AvatarImage src={session?.user?.image as any} alt="my profile" />
+        </Avatar>
+        <p className="text-myText">{session?.user?.name}</p>
         </div>
+
       </div>
    </Layout>
   );
