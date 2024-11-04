@@ -1,7 +1,11 @@
-import CustomLabel from "@/components/LabelCustom";
+import LabelCustom from "@/components/LabelCustom";
 import Layout from "@/components/Layout";
 import TitleSection from "@/components/Title";
-import { Box, Stack, Table } from "@chakra-ui/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { withSwal } from 'react-sweetalert2';
@@ -63,7 +67,7 @@ function Categories({swal}: any) {
       showCancelButton: true, // This enables the cancel button
       cancelButtonText: 'Cancel',
       confirmButtonText: 'Yes, Delete',
-      confirmButtonColor: '#d55',
+      confirmButtonColor: '#ef4444',
       reverseButtons: true
     }).then( async (result: any) => {
       if (result.isConfirmed) {
@@ -106,55 +110,52 @@ function Categories({swal}: any) {
 
   return (
     <Layout>
-      <TitleSection title={editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"} />
+      <TitleSection title="Categories" />
+      <LabelCustom name={editedCategory ? `Edit category ${editedCategory.name}` : "Create new category"} />
 
-      <form onSubmit={saveCategory}>
-        <Stack className="!grid grid-cols-2 gap-1">
-          <Box>
-            <CustomLabel name="Category name" />
-            <input 
-              type="text" 
-              placeholder="Category name" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)}
-            />
+      <form onSubmit={saveCategory} className="grid gap-4">
+        <div className="flex gap-1">
+          <Input 
+            type="text" 
+            placeholder="Category name" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
+          />
 
-          </Box>
-          
-          <Box>
-            <CustomLabel name="Category name" />
-            <select 
-              value={parentCategory}
-              onChange={(e) => setParentCategory(e.target.value)}
-              className="pt-3"
-            >
-              <option value="">No parent category</option>
-              {categories.length > 0 && categories
-                .filter((category:any) => category._id !== editedCategory?._id) // Exclude the currently edited category
-                .map((category:any, idx: number) => (
-                  <option value={category._id} key={idx}>{category.name}</option>
-                ))}
-            </select>
-          </Box>
-        </Stack>
+          <Select
+            value={parentCategory}
+            onValueChange={(value) => setParentCategory(value)} // `onValueChange` returns the value directly
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="No parent category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.length > 0 && categories.map((category: any) => (
+                <SelectItem value={category._id} key={category._id}>
+                  {category.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
-        <div className="mb-2 mt-5">
-          <Box className="grid">
-            <CustomLabel name="Properties" />
-            <button 
-              onClick={addProperty}
+        <div>
+          <div className="grid">
+            <LabelCustom name="Properties" />
+            <Button 
+              onClick={addProperty} 
               type="button" 
-              className="btn-default text-sm mb-2 w-fit mt-2"
+              className="w-fit bg-myOldBlue/90 text-myText mb-2 hover:bg-myOldBlue/70"
             >
               Add new property
-            </button>
-          </Box>
+            </Button>
+          </div>
+
           {properties.length > 0 && properties.map((property: any, idx: number) => (
-            <div className="flex gap-1 mb-2" key={idx}>
-              <input 
+            <div className="flex gap-2 py-2" key={idx}>
+              <Input 
                 type="text" 
                 value={property.name} 
-                className="mb-0"
                 onChange={(e) =>handlePropertyNameChange(
                   idx, 
                   property, 
@@ -162,10 +163,9 @@ function Categories({swal}: any) {
                 )}
                 placeholder="property name (example: color)" 
               />
-              <input 
+              <Input 
                 type="text" 
                 value={property.values} 
-                className="mb-0"
                 onChange={(e) =>handlePropertyValueChange(
                   idx, 
                   property, 
@@ -174,20 +174,20 @@ function Categories({swal}: any) {
                 placeholder="values, comma separated" 
               />
 
-              <button 
+              <Button 
                 onClick={() => removeProperty(idx)}
-                className="btn-red"
+                className="bg-red-500 hover:bg-red-500/80"
                 type="button"
               >
                 Remove
-              </button>
+              </Button>
             </div>
           ))}
         </div>
-        
+
         <div className="flex gap-1">
           {editedCategory && (
-            <button 
+            <Button 
               type="submit" 
               className="btn-default py-1"
               onClick={() => {
@@ -198,67 +198,50 @@ function Categories({swal}: any) {
               }}
             >
               Cancel
-            </button>
+            </Button>
           )}
 
-          <button 
-            type="submit" 
-            className="
-              bg-green-700/40 
-              px-4 
-              py-1.5 
-              rounded-lg 
-              text-white
-            "
-          >
+          <Button type="submit" className="bg-myOldBlue/90 hover:bg-myOldBlue/70">
             Save
-          </button>
+          </Button>
         </div>
 
         {!editedCategory && (
-          <Table.Root 
-            striped 
-            size="md" 
-            variant={"outline"} 
-            className="
-              shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] 
-              rounded-xl 
-              border 
-              border-slate-200
-              mt-6
-            "
-          >
-            <Table.Header className="bg-primary-gradient">
-              <Table.Row>
-                <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Category Name</Table.ColumnHeader>
-                <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Parent category</Table.ColumnHeader>
-                <Table.ColumnHeader></Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
+          <div className="shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] max-h-[750px] overflow-auto mt-5 rounded-lg">
+            <Table>
+              <TableHeader className="bg-myOldBlue/90">
+                <TableRow>
+                  <TableHead className="text-myText uppercase font-bold">Category Name</TableHead>
+                  <TableHead className="text-myText uppercase font-bold">Parent category</TableHead>
+                  <TableHead></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
               {categories.length > 0 && categories.map((category:any, idx: number) => (
-                <Table.Row key={idx}>
-                  <Table.Cell>{category.name}</Table.Cell>
-                  <Table.Cell>{category?.parent?.name}</Table.Cell>
-                  <Table.Cell>
-                    <button
-                      type="button"
-                      className="btn-default mr-1 !rounded-md"
-                      onClick={() => editCategory(category)}
-                    >
-                      Edit
-                    </button>
-                    <button 
-                      type="button"
-                      className="btn-red !rounded-md"
-                      onClick={() => deleteCategory(category)}
-                    >Delete</button>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
+                  <TableRow key={idx}>
+                    <TableCell>{category.name}</TableCell>
+                    <TableCell>{category?.parent?.name}</TableCell>
+                    <TableCell className="flex gap-2.5">
+                      <Button
+                        type="button"
+                          className="bg-green-700/20 text-green-700 hover:bg-green-700/10 hover:text-green-400"
+                        onClick={() => editCategory(category)}
+                      >
+                        Edit
+                      </Button>
+                      <Button 
+                        type="button"
+                        className="btn-red hover:bg-red-200 hover:text-myText"
+                        onClick={() => deleteCategory(category)}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         )}
       </form>
 

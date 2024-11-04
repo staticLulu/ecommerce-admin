@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout"
-import { Table } from "@chakra-ui/react";
+import TitleSection from "@/components/Title";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -14,53 +15,43 @@ const OrdersPage = () => {
 
   return (
     <Layout>
-      <h1>Orders</h1>
-
-      <Table.Root
-        striped 
-        size="md" 
-        variant={"outline"} 
-        className="
-          shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] 
-          rounded-xl 
-          border 
-          border-slate-200
-          mt-6
-        "
-      >
-        <Table.Header className="bg-primary-gradient">
-          <Table.Row>
-            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Date</Table.ColumnHeader>
-            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Paid</Table.ColumnHeader>
-            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Recipient</Table.ColumnHeader>
-            <Table.ColumnHeader className="uppercase font-semibold text-slate-500">Products</Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {orders.length > 0 && orders.map((order: any, idx: number) => (
-            <Table.Row key={idx}>
-              <Table.Cell>{(new Date(order.createdAt)).toLocaleDateString()}</Table.Cell>
-              <Table.Cell 
-                className={order.paid ? "text-green-500" : "text-red-500"}
-              >
-                {order.paid ? 'YES' : 'NO'}
-              </Table.Cell>
-              <Table.Cell>
-                {order.name} {order.email} <br />
-                {order.city} {order.postalCode} {order.country} <br />
-                {order.streetAddress}
-              </Table.Cell>
-              <Table.Cell>
-                {order.line_items.map((l: any, idx: number) => (
-                  <div key={idx}>
-                    {l.price_data.product_data?.name} x {l.quantity}
-                  </div>
-                ))}
-              </Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+      <TitleSection title="Order list" />
+      <div className="shadow-[0px_1px_4px_0px_rgba(0,0,0,0.08)] max-h-[750px] overflow-auto mt-5 rounded-lg">
+        <Table>
+          <TableHeader className="bg-myOldBlue/90">
+            <TableRow>
+              <TableHead className="text-myText uppercase font-bold">Date</TableHead>
+              <TableHead className="text-myText uppercase font-bold">Paid</TableHead>
+              <TableHead className="text-myText uppercase font-bold">Recipient</TableHead>
+              <TableHead className="text-myText uppercase font-bold">Products</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {orders.length > 0 && orders.map((order: any, idx: number) => (
+              <TableRow key={idx}>
+                <TableCell>{(new Date(order.createdAt)).toLocaleDateString()}</TableCell>
+                <TableCell 
+                  className={order.paid ? "text-green-500" : "text-red-500"}
+                >
+                  {order.paid ? 'YES' : 'NO'}
+                </TableCell>
+                <TableCell>
+                  {order.name} {order.email} <br />
+                  {order.city} {order.postalCode} {order.country} <br />
+                  {order.streetAddress}
+                </TableCell>
+                <TableCell>
+                  {order.line_items.map((l: any, idx: number) => (
+                    <div key={idx}>
+                      {l.price_data.product_data?.name} x {l.quantity}
+                    </div>
+                  ))}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </Layout>
   )
 }

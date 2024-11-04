@@ -1,7 +1,9 @@
-const CustomLabel = ({name}:{name: string;}) => {
+import { Label } from "./ui/label";
+
+const LabelCustom = ({name}:{name: string;}) => {
   return (
-    <label className="text-base font-semibold text-slate-500">{name}</label>
+    <Label className="text-lg font-semibold text-myOldBlue/80 !mb-1.5">{name}</Label>
   )
 }
 
-export default CustomLabel;
+export default LabelCustom;
